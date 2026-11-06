@@ -1,5 +1,6 @@
 package com.example.sampleapi.repository;
 
+import com.example.sampleapi.dto.User;
 import com.example.sampleapi.mapper.UserMapper;
 import org.springframework.stereotype.Repository;
 

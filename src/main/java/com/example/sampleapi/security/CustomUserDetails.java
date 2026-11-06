@@ -1,5 +1,6 @@
 package com.example.sampleapi.security;
 
+import com.example.sampleapi.dto.User;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

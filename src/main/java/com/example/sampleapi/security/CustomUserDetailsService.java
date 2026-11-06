@@ -1,5 +1,6 @@
 package com.example.sampleapi.security;
 
+import com.example.sampleapi.dto.User;
 import com.example.sampleapi.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
