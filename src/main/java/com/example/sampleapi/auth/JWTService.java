@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -43,8 +42,8 @@ public class JWTService {
                 .getPayload();
     }
 
-    //JWT　トークンからユーザ名を取得
-    public String getusernameFromToken(String token) {
+    //JWT　トークンからユーザ名を取得 間違ってる可も
+    public String getUsernameFromToken(String token) {
         return getClaimsFromToken(token).getSubject();
     }
 
@@ -58,8 +57,8 @@ public class JWTService {
         return expiration.before(new Date());
     }
     //トークンの検証
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        String tokenUsername = getusernameFromToken(token);
+    public Boolean validateToken(String token, String userDetails) {
+        String tokenUsername = getUsernameFromToken(token);
         return (tokenUsername.equals(username) && !isTokenExpired(token));
     }
 }
