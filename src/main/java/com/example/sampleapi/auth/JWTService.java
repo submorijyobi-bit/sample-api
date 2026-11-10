@@ -1,0 +1,65 @@
+package com.example.sampleapi.auth;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
+import java.util.Base64;
+import java.util.Date;
+
+@Service
+public class JWTService {
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.expiration}")
+    private String expiration;
+    //秘密鍵を生成している
+    private SecretKey getSigningKey(){
+        byte[] decodedKey = Base64.getDecoder().decode(secret);
+        return Keys.hmacShaKeyFor(decodedKey);
+    }
+
+    //JWTトークンを生成するメソッド
+    public String generateToken(String username){
+        return jwts.builder()
+                .subject(username)
+                .issueAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey(), Jwts.SIG.HG256)//暗号化してる
+                .compact();
+    }
+
+    //JWT　トークンをパースしてクレームを取得
+    private Claims getClaimsFromToken(String token){
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    //JWT　トークンからユーザ名を取得
+    public String getusernameFromToken(String token) {
+        return getClaimsFromToken(token).getSubject();
+    }
+
+    //JWT　トークン空有効期限を取得
+    public Date getExpirationDateFromToken(String token){
+        return getClaimsFromToken(token).getExpiration();
+    }
+
+    public Boolean isTokenExpired(String token) {
+        Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+    //トークンの検証
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        String tokenUsername = getusernameFromToken(token);
+        return (tokenUsername.equals(username) && !isTokenExpired(token));
+    }
+}
