@@ -25,11 +25,11 @@ public class JWTService {
 
     //JWTトークンを生成するメソッド
     public String generateToken(String username){
-        return jwts.builder()
+        return Jwts.builder()
                 .subject(username)
-                .issueAt(new Date())
+                .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey(), Jwts.SIG.HG256)//暗号化してる
+                .signWith(getSigningKey(), Jwts.SIG.HS256)//暗号化してる
                 .compact();
     }
 
@@ -57,7 +57,7 @@ public class JWTService {
         return expiration.before(new Date());
     }
     //トークンの検証
-    public Boolean validateToken(String token, String userDetails) {
+    public Boolean validateToken(String token, String username) {
         String tokenUsername = getUsernameFromToken(token);
         return (tokenUsername.equals(username) && !isTokenExpired(token));
     }
