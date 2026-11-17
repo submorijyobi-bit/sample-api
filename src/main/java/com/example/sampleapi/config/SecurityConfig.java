@@ -1,7 +1,7 @@
 package com.example.sampleapi.config;
 
 import com.example.sampleapi.auth.JWTService;
-import com.example.sampleapi.auth.JwtAuthenticationFilter;
+import com.example.sampleapi.auth.JWTAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,10 +17,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFiller;
+    private final JWTAuthenticationFilter jwtAuthenticationFiller;
     private final JWTService jwtService;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFiller, JWTService jwtService) {
+    public SecurityConfig(JWTAuthenticationFilter jwtAuthenticationFiller, JWTService jwtService) {
         this.jwtAuthenticationFiller = jwtAuthenticationFiller;
         this.jwtService = jwtService;
     }
@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/", "/index.html", "/app.js", "/favicon.ico", "/css/**", "/js/**", "/static/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFiller, UsernamePasswordAuthenticationFilter.class);
