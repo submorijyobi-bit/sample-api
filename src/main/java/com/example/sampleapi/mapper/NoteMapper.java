@@ -21,6 +21,9 @@ public interface NoteMapper {
     @Update("UPDATE notes SET title = #{title}, content = #{content} WHERE id = #{id}")
     int update(Note note);
 
+    @Insert("INSERT INTO users(username, password, created_at) VALUES (#{username},#{password}, CURRENT_TIMESTAMP)")
+    void insertUser(String username, String password);
+
 
     }
 
