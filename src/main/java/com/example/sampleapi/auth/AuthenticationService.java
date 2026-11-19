@@ -62,7 +62,7 @@ public class AuthenticationService {
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
         userRepository.insertUser(registerRequest.getUsername(), encodedPassword);
 
-        loginResponse loginResponse = new LoginResponse();
+        LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtService.generateToken(registerRequest.getUsername()));
         return loginResponse;
     }
